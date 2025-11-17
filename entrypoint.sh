@@ -99,7 +99,7 @@ setup_cron() {
     
     # Add an additional job to run logrotate if MAX_SIZE is specified (check every 15 minutes)
     if [ "${MAX_SIZE}" != "NONE" ]; then
-        echo "*/15 * * * * /usr/sbin/logrotate -f /etc/logrotate.d/docker-logs" >> /etc/crontabs/root
+        echo "*/15 * * * * /usr/sbin/logrotate /etc/logrotate.d/docker-logs" >> /etc/crontabs/root
     fi
     
     echo "Cron job set up."
