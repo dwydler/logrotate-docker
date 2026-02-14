@@ -2,7 +2,7 @@
 name: Manage - Sync fork (Branch main)
 
 "on":
-    workflow_dispatch:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
 
