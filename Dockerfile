@@ -1,10 +1,13 @@
 FROM alpine:3
 
-LABEL maintainer="SamuelRu"
-LABEL description="Docker image for rotating log files from other containers"
-LABEL license="MIT"
-LABEL copyright="Copyright (c) 2025 Samuel Runggaldier"
-LABEL source="https://github.com/samuelru/logrotate"
+# Metadata
+LABEL maintainer="Daniel Wydler"
+LABEL org.opencontainers.image.authors="Daniel Wydler"
+LABEL org.opencontainers.image.description="Docker image for rotating log files from other containers."
+LABEL org.opencontainers.image.documentation="https://github.com/dwydler/logrotate-docker/blob/master/README.md"
+LABEL org.opencontainers.image.source="https://github.com/dwydler/logrotate-docker"
+LABEL org.opencontainers.image.title="wydler/logrotate"
+LABEL org.opencontainers.image.url="https://github.com/dwydler/logrotate-docker"
 
 # Install required packages
 RUN apk add --no-cache \
