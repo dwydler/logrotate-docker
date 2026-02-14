@@ -23,8 +23,7 @@ RUN apk add --no-cache \
 RUN mkdir -p /logs
 
 # Copy entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
 # Set environment variables with default values
 ENV LOGS_PATH="/logs/*.log" \
