@@ -1,0 +1,42 @@
+---
+name: Manage - Sync fork (Branch main)
+
+"on":
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+      contents: read
+
+jobs:
+  update_external_airflow_fork:
+    name: Sync branch main with origin
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:     
+      - name: Generate app token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf  # v2.2.1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.GH_APP_SRP_ID }}
+          private-key: ${{ secrets.GH_APP_SRP_PRIVATE_KEY }}
+
+      - name: Checkout Code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Synchronize the given branch now
+        uses: TobKed/github-forks-sync-action@2fb78daa46a630ff56455a63dec51ff00ba56e23  # v0.4.0
+        with:
+          github_token: ${{ steps.generate-token.outputs.token }}
+          upstream_repository: samuelru/logrotate
+          target_repository: dwydler/logrotate-docker
+          upstream_branch: main
+          target_branch: main
+          force: false
+          tags: false
