@@ -11,7 +11,8 @@ LABEL org.opencontainers.image.title="wydler/logrotate"
 LABEL org.opencontainers.image.url="https://github.com/dwydler/logrotate-docker"
 
 # Install required packages
-RUN apk add --no-cache \
+RUN apk upgrade --no-cache \
+ && apk add --no-cache \
     logrotate \
     tzdata \
     bash \
