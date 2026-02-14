@@ -85,6 +85,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ env.REGISTRY_REPO }}
+          repository: ${{ env.REGISTRY_ACCOUNT }}/${{ env.REGISTRY_REPO }}
           readme-filepath: ./README-dockerhub.md
           short-description: "Docker image for rotating log files from other containers"
