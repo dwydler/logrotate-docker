@@ -73,33 +73,41 @@ generate_logrotate_config() {
 # Function to setup cron job
 setup_cron() {
     echo "Setting up cron job for logrotate..."
+
+    # 
+    LOGROTATE_BIN=$(which logrotate)
+    LOGROTATE_CONF="/etc/logrotate.d/docker-logs"
+    LOGROTATE_STATUS="logrotate.status"
     
     # Create cron job based on TRIGGER_INTERVAL
     case "${TRIGGER_INTERVAL}" in
         hourly)
-            echo "0 * * * * /usr/sbin/logrotate -f /etc/logrotate.d/docker-logs" > /etc/crontabs/root
+            CRON_SCHEDULE_EXPRESSION="0 * * * *"
             ;;
         daily)
-            echo "0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.d/docker-logs" > /etc/crontabs/root
+            CRON_SCHEDULE_EXPRESSION="0 0 * * *"
             ;;
         weekly)
-            echo "0 0 * * 0 /usr/sbin/logrotate -f /etc/logrotate.d/docker-logs" > /etc/crontabs/root
+            CRON_SCHEDULE_EXPRESSION="0 0 * * 0"
             ;;
         monthly)
-            echo "0 0 1 * * /usr/sbin/logrotate -f /etc/logrotate.d/docker-logs" > /etc/crontabs/root
+            CRON_SCHEDULE_EXPRESSION="0 0 1 * *"
             ;;
         yearly)
-            echo "0 0 1 1 * /usr/sbin/logrotate -f /etc/logrotate.d/docker-logs" > /etc/crontabs/root
+            CRON_SCHEDULE_EXPRESSION="0 0 1 1 *"
             ;;
         *)
             echo "Invalid TRIGGER_INTERVAL: ${TRIGGER_INTERVAL}. Using daily as default."
-            echo "0 0 * * * /usr/sbin/logrotate -f /etc/logrotate.d/docker-logs" > /etc/crontabs/root
+            CRON_SCHEDULE_EXPRESSION="0 0 * * *"
             ;;
     esac
     
+    #
+    echo "$CRON_SCHEDULE_EXPRESSION $LOGROTATE_BIN -f $LOGROTATE_CONF -s ${LOGS_PATH}/$LOGROTATE_STATUS" > /etc/crontabs/root
+
     # Add an additional job to run logrotate if MAX_SIZE is specified (check every 15 minutes)
     if [ "${MAX_SIZE}" != "NONE" ]; then
-        echo "*/15 * * * * /usr/sbin/logrotate /etc/logrotate.d/docker-logs" >> /etc/crontabs/root
+        echo "*/15 * * * * $LOGROTATE_BIN $LOGROTATE_CONF -s ${LOGS_PATH}/$LOGROTATE_STATUS" >> /etc/crontabs/root
     fi
     
     echo "Cron job set up."
