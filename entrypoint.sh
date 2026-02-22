@@ -104,7 +104,7 @@ setup_cron() {
     esac
     
     #
-    echo "$CRON_SCHEDULE_EXPRESSION $LOGROTATE_BIN -f $LOGROTATE_CONF -s $LOGROTATE_STATUS_DIR/$LOGROTATE_STATUS_FILE" > /etc/crontabs/root
+    echo "$CRON_SCHEDULE_EXPRESSION $LOGROTATE_BIN $LOGROTATE_CONF -s $LOGROTATE_STATUS_DIR/$LOGROTATE_STATUS_FILE" > /etc/crontabs/root
 
     # Add an additional job to run logrotate if MAX_SIZE is specified (check every 15 minutes)
     if [ "${MAX_SIZE}" != "NONE" ]; then
@@ -144,7 +144,7 @@ main() {
     
     # Run logrotate once at startup
     echo "Running logrotate at startup..."
-    /usr/sbin/logrotate -f /etc/logrotate.d/docker-logs
+    /usr/sbin/logrotate /etc/logrotate.d/docker-logs
     
     # Start cron in foreground
     echo "Starting cron daemon..."
